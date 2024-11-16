@@ -4,12 +4,67 @@ import plotly.graph_objects as go
 import plotly.express as px
 import numpy as np
 from datetime import datetime, timedelta
-import openai  # For LLM integration
+import openai
 import folium
 from streamlit_folium import st_folium
+from tenacity import retry, stop_after_attempt, wait_exponential
+
+openai.api_key = st.secrets["OPENAI_API_KEY"]
 
 # Configure page settings
 st.set_page_config(page_title="BuildingEcoViz - Building Emissions Management", page_icon="🏢", layout="wide")
+
+@retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=4, max=10))
+def get_energy_recommendations(building_name: str, building_data: pd.DataFrame, usage_description: str) -> str:
+    """
+    Get energy recommendations using OpenAI's API
+    Includes retry logic for API reliability
+    """
+    building_info = building_data[building_data['name'] == building_name].iloc[0]
+    
+    prompt = f"""As an energy efficiency expert, provide specific recommendations for the following building:
+
+Building Details:
+- Name: {building_info['name']}
+- Current Annual Emissions: {building_info['annual_emissions']} kg CO2e
+- Building Area: {building_info['area_sqft']} sq ft
+- Current Energy Usage: {building_info['energy_usage']} kWh
+- Current Energy Rating: {building_info['rating']}
+
+User's Description of Energy Usage:
+{usage_description}
+
+Please provide detailed, actionable recommendations in the following areas:
+1. HVAC Optimization
+2. Lighting Systems
+3. Equipment and Appliances
+4. Building Envelope
+5. Energy Management Practices
+
+For each recommendation, include:
+- Specific action items
+- Estimated impact on energy usage
+- Implementation complexity (Low/Medium/High)
+- Typical payback period
+
+Also provide an overall estimate of potential energy savings as a percentage range.
+Format the response in Markdown for better readability.
+"""
+
+    try:
+        response = openai.chat.completions.create(
+            model="gpt-4o",
+            messages=[
+                {"role": "system", "content": "You are an expert energy efficiency consultant specializing in commercial buildings."},
+                {"role": "user", "content": prompt}
+            ],
+            temperature=0.7,
+            max_tokens=1500
+        )
+        return response.choices[0].message.content
+    except Exception as e:
+        st.error(f"Error getting recommendations: {str(e)}")
+        return None
 
 # Initialize session state variables
 if 'buildings_data' not in st.session_state:
@@ -142,7 +197,7 @@ with tab2:
     with col2:
         st.subheader("Credit Price Trends")
         # Mock price trend data
-        dates = pd.date_range(start='2023-01-01', end='2023-12-31', freq='M')
+        dates = pd.date_range(start='2023-01-01', end='2023-12-31', freq='ME')
         prices = 20 + np.random.normal(0, 2, len(dates))
         
         fig = px.line(x=dates, y=prices,
@@ -210,25 +265,24 @@ with tab4:
     )
     
     if st.button("Get Recommendations") and usage_description:
-        # Mock LLM response
-        recommendations = """Based on your description, here are some recommendations:
-
-1. HVAC Optimization:
-   - Implement smart scheduling to reduce off-hours operation
-   - Consider upgrading to a more efficient system
-   
-2. Lighting:
-   - Replace fluorescent lights with LED fixtures
-   - Install occupancy sensors in less-used areas
-   
-3. Workstations:
-   - Enable power management settings on all computers
-   - Install smart power strips to reduce phantom loads
-
-Estimated potential savings: 15-20% reduction in energy usage."""
-
-        st.success("Analysis complete!")
-        st.write(recommendations)
+        with st.spinner("Analyzing building data and generating recommendations..."):
+            recommendations = get_energy_recommendations(
+                building_name,
+                st.session_state.buildings_data,
+                usage_description
+            )
+            
+            if recommendations:
+                st.success("Analysis complete!")
+                st.markdown(recommendations)
+                
+                # Add option to download recommendations as PDF or text
+                st.download_button(
+                    label="Download Recommendations",
+                    data=recommendations,
+                    file_name=f"energy_recommendations_{building_name}.md",
+                    mime="text/markdown"
+                )
 
 with tab5:
     st.header("Add New Building")
@@ -281,36 +335,3 @@ with st.sidebar:
     """)
     
     st.header("Rating System")
-    st.write("""
-    **Rating A:** < 50 kg CO2e/sq ft/year
-    **Rating B:** 50-75 kg CO2e/sq ft/year
-    **Rating C:** > 75 kg CO2e/sq ft/year
-    """)
-    
-    # Emissions forecast
-    st.header("Emissions Forecast")
-    forecast_building = st.selectbox(
-        "Select Building",
-        options=st.session_state.buildings_data['name'].tolist(),
-        key="forecast_building"
-    )
-    
-    # Generate mock forecast data
-    forecast_dates = pd.date_range(start='2024-01-01', end='2024-12-31', freq='M')
-    base_emissions = st.session_state.buildings_data[
-        st.session_state.buildings_data['name'] == forecast_building
-    ]['annual_emissions'].iloc[0] / 12
-    
-    # Add seasonal variation and slight downward trend
-    forecast_emissions = base_emissions * (
-        1 + 0.2 * np.sin(np.arange(len(forecast_dates)) * 2 * np.pi / 12) - 
-        0.1 * np.arange(len(forecast_dates)) / len(forecast_dates)
-    )
-    
-    fig = px.line(x=forecast_dates, y=forecast_emissions,
-                 labels={'x': 'Date', 'y': 'Projected Emissions (kg CO2e)'},
-                 title='12-Month Emissions Forecast')
-    st.plotly_chart(fig, use_container_width=True)
-    
-    st.header("Need Help?")
-    st.write("Contact our support team at support@buildingecovis.com")
