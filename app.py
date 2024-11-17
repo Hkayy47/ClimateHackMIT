@@ -1,6 +1,7 @@
 import streamlit as st
 from config import init_config
 from pages.home import display_home
+import csv
 from pages.emissions_trading import display_emissions_trading
 from pages.offset_projects import display_offset_projects
 from pages.energy_consultation import display_energy_consultation
@@ -103,8 +104,9 @@ with nav_col:
     
     selected_page = st.radio(
         "Navigation",
-       ["Home", "Emissions Trading", "Offset Projects", "Energy Consultation", "Add Building"],
-        label_visibility="collapsed"
+       ["Home", "Emissions Trading", "Offset Projects", "Energy Consultation", "Add Building"]
+
+       
     )
 with content_col:
     if selected_page == "Home":
