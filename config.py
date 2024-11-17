@@ -1,6 +1,8 @@
 import streamlit as st
 import pandas as pd
 import google.generativeai as genai
+# config.py
+EI_API_KEY = "your_api_key_here"
 
 # Configure Gemini API
 genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])

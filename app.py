@@ -12,7 +12,7 @@ init_config()
 nav_col, content_col = st.columns([1, 8])
 
 with nav_col:
-    st.image("logo.png", use_column_width=True)  # Adjust 'use_column_width' as needed
+    st.image("logo.png", use_container_width=True)  # Adjust 'use_column_width' as needed
     st.write("---")
     selected_page = st.radio(
         
