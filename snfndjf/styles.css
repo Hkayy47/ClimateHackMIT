@@ -1,0 +1,713 @@
+body {
+    margin: 0;
+    padding: 0;
+    height: auto;
+    min-height: 100vh;
+    overflow-y: auto;
+    font-family: 'Montserrat', sans-serif;
+    color: white;
+}
+  /* Enhanced background handling for all devices */
+  .hero-section {
+      height: 100vh;
+      background-image: url("bg.png");
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      overflow: hidden;
+  }
+
+  @media screen and (max-width: 768px) {
+      .hero-section {
+          background-size: cover;
+          background-position: center center;
+          background-repeat: no-repeat;
+          width: 100%;
+      }
+    
+      /* Ensure container fits perfectly */
+      .container {
+          width: 100%;
+          padding: 20px;
+          box-sizing: border-box;
+      }
+  }
+.container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+main {
+    display: flex;
+    flex-direction: column;
+}
+.logo {
+    max-width: 300px;
+    margin-bottom: 80px;
+    margin-top: -100px;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+/* Stars animation */
+.stars {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+  .star {
+      position: absolute;
+      width: 3px;  /* Bigger stars */
+      height: 3px;
+      background: white;
+      border-radius: 50%;
+      animation: twinkle var(--duration) linear infinite;
+      opacity: 0;
+  }
+
+  @keyframes twinkle {
+      0% { opacity: 0; }
+      50% { opacity: 1; }
+      100% { opacity: 0; }
+  }
+.counters {
+    display: flex;
+    gap: 100px;
+    text-align: center;
+}
+
+.counter-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.number {
+    font-size: 5rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+}
+
+.label {
+    font-size: 1.5rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+/* Add these new styles */
+.hidden {
+    opacity: 0;
+}
+
+main {
+    opacity: 0;
+    transition: opacity 1.5s ease-in;
+}
+
+#preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #1D2526;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    transition: opacity 0.5s ease-out;
+      transition: opacity 0.5s ease-out;
+  }
+
+  .preloader-leaf {
+      width: 50px;
+      height: 50px;
+      background: #4CAF50;
+      clip-path: path('M24.5,0 C30,10 50,20 24.5,40 C-1,20 19,10 24.5,0');
+      animation: floatLeaf 2s ease-in-out infinite;
+  }
+
+  @keyframes floatLeaf {
+      0%, 100% {
+          transform: translateY(0) rotate(0deg);
+      }
+      50% {
+          transform: translateY(-20px) rotate(5deg);
+      }
+  }
+/* Keep your existing styles and add this for main content */
+.main-content {
+    min-height: 100vh;
+    transition: opacity 1.5s ease-in;
+}
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    z-index: 100;
+    transition: all 0.3s ease;
+}
+  .header-content {
+      position: relative;
+      height: 100%;
+      display: flex;
+      justify-content: space-between; /* Changed from flex-end */
+      align-items: center;
+      padding: 0 40px;
+  }
+
+  .header-left {
+      position: relative;
+      z-index: 1;
+  }
+
+  .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+  }
+
+  .header-logo {
+      height: 32px;
+      width: auto;
+  }
+
+  .brand-name {
+      color: white;
+      font-weight: 600;
+      font-size: 20px;
+      letter-spacing: 0.5px;
+  }
+.header-blur {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(0px);
+    background: rgba(255, 255, 255, 0);
+    transition: all 0.3s ease;
+}
+
+.header.scrolled .header-blur {
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.dashboard-btn {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50px;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.dashboard-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.counters {
+    display: flex;
+    gap: 100px;
+    text-align: center;
+
+    margin-bottom: 30px;
+}
+  .container {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+  }
+.sponsor {
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    opacity: 0;
+    animation: fadeIn 0.5s ease-in forwards;
+    animation-delay: 4s;
+
+    margin-top: 40px;
+}
+.sponsor-text {
+    font-size: 16px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.8);
+    letter-spacing: 0.5px;
+}
+
+.sponsor-logo {
+    height: 24px;
+    width: auto;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.about {
+    background: #1D2526;
+    padding: 100px 0;
+}
+
+.about-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.about h2 {
+    color: white;
+    font-size: 42px;
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.about-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}
+
+.about-card {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 40px;
+    border-radius: 12px;
+    transition: transform 0.3s ease;
+}
+
+.about-card:hover {
+    transform: translateY(-5px);
+}
+
+.about-card h3 {
+    color: white;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.about-card p {
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.6;
+}
+  .stars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 1;
+  }
+
+  .footer {
+      position: relative;
+      margin-top: auto;
+      width: 100%;
+      background: rgba(22, 27, 28, 0.85);
+      padding: 80px 0 30px;
+      z-index: 2;
+  }
+
+  .about {
+      position: relative;
+      background: rgba(29, 37, 38, 0.85);
+      z-index: 2;
+  }
+
+  html, body {
+      margin: 0;
+      padding: 0;
+    overflow-x: hidden;
+    background: #161B1C;
+    height: 100%;
+}
+
+main {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+.footer {
+    margin-top: auto;
+    width: 100%;
+    background: #161B1C;
+    padding: 80px 0 30px;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.footer-main {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 60px;
+}
+
+.footer-brand {
+    max-width: 300px;
+}
+
+.footer-logo {
+    height: 40px;
+    margin-bottom: 20px;
+}
+
+.footer-tagline {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.footer-links {
+    display: flex;
+    gap: 80px;
+}
+
+.footer-column h4 {
+    color: white;
+    margin-bottom: 20px;
+    font-size: 18px;
+}
+
+.footer-column ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-column ul li {
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.footer-column ul li:hover {
+    color: white;
+}
+
+.footer-bottom {
+    padding-top: 30px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: space-between;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.footer-legal {
+    display: flex;
+    gap: 20px;
+}
+
+.footer-legal a {
+    color: rgba(255, 255, 255, 0.6);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-legal a:hover {
+    color: white;
+}
+
+/* Custom Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1D2526;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #2A3435;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #374445;
+}
+
+/* For Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #2A3435 #1D2526;
+}
+
+/* Base styles remain the same */
+
+/* Tablet Optimization (768px - 1024px) */
+@media screen and (max-width: 1024px) {
+    .hero-section {
+        height: 100vh;
+    }
+
+    .logo {
+        width: 250px;
+        margin-top: -60px;
+    }
+
+    .counters {
+        gap: 60px;
+    }
+
+    .number {
+        font-size: 4rem;
+    }
+
+    .about-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        padding: 0 40px;
+    }
+}
+
+/* Mobile First Approach */
+@media screen and (max-width: 767px) {
+    /* Hero Section */
+    .hero-section {
+        height: 100vh;
+    }
+
+    .container {
+        padding: 0 12px;
+    }
+
+    .logo {
+        width: 100px;
+        margin-bottom: 20px;
+    }
+
+    .counters {
+        gap: 16px;
+    }
+
+    .number {
+        font-size: 1.8rem;
+    }
+
+    .label {
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+    }
+
+    /* About Section */
+    .about {
+        padding: 20px 12px;
+    }
+
+    .about h2 {
+        font-size: 18px;
+        margin-bottom: 16px;
+    }
+
+    .about-card {
+        padding: 12px;
+        margin-bottom: 12px;
+    }
+
+    .about-card h3 {
+        font-size: 14px;
+        margin-bottom: 6px;
+    }
+
+    .about-card p {
+        font-size: 12px;
+        line-height: 1.3;
+    }
+
+    /* Footer */
+    .footer {
+        padding: 20px 12px;
+    }
+
+    .footer-content {
+        max-width: 100%;
+    }
+
+    .footer-brand {
+        margin-bottom: 12px;
+    }
+
+    .footer-logo {
+        height: 20px;
+    }
+
+    .footer-tagline {
+        font-size: 12px;
+    }
+
+    .footer-column {
+        margin-bottom: 16px;
+    }
+
+    .footer-column h4 {
+        font-size: 13px;
+        margin-bottom: 8px;
+    }
+
+    .footer-column ul li {
+        font-size: 12px;
+        margin-bottom: 4px;
+    }
+
+    /* Header */
+    .header {
+        height: 60px;
+    }
+
+    .header-content {
+        padding: 0 12px;
+    }
+
+    .brand-name {
+        font-size: 13px;
+    }
+
+    .dashboard-btn {
+        padding: 6px 10px;
+        font-size: 11px;
+    }
+}/* Extra Small Devices */
+@media screen and (max-width: 360px) {
+    .number {
+        font-size: 2rem;
+    }
+
+    .label {
+        font-size: 0.8rem;
+    }
+
+    .about h2 {
+        font-size: 22px;
+    }
+}
+.particles-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.particle {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    pointer-events: none;
+    animation: windParticle var(--duration) linear infinite;
+}
+
+@keyframes windParticle {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+        opacity: 0;
+    }
+    50% {
+        opacity: 0.5;
+    }
+    100% {
+        transform: translate(100vw, -100vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+  .birds {
+      position: absolute;
+      top: 15%;
+      left: 10%;
+      z-index: 2;
+  }
+
+  .bird {
+      position: absolute;
+      opacity: 0.8;
+      animation: fly 2s ease-in-out infinite;
+  }
+
+  .bird::before,
+  .bird::after {
+      content: '';
+      position: absolute;
+      background: white;
+      animation: flap 2s ease-in-out infinite;
+  }
+
+  .bird::before {
+      width: 20px;
+      height: 4px;
+      border-radius: 50% 50% 0 0;
+      transform: rotate(-30deg);
+  }
+
+  .bird::after {
+      width: 20px;
+      height: 4px;
+      border-radius: 50% 50% 0 0;
+      transform: rotate(30deg);
+      left: 12px;
+  }
+
+  .bird-1 { animation-delay: 0s; }
+  .bird-2 { 
+      transform: scale(0.8); 
+      left: 40px;
+      top: 15px;
+      animation-delay: 0.2s;
+  }
+  .bird-3 { 
+      transform: scale(0.8);
+      left: -30px;
+      top: 15px;
+      animation-delay: 0.4s;
+  }
+
+  @keyframes fly {
+      0%, 100% {
+          transform: translateY(0) scale(1);
+      }
+      50% {
+          transform: translateY(-15px) scale(1);
+      }
+  }
+
+  @keyframes flap {
+      0%, 100% {
+          transform: rotate(-30deg);
+      }
+      50% {
+          transform: rotate(-20deg);
+      }
+  }
