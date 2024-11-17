@@ -4,12 +4,13 @@ import plotly.graph_objects as go
 import plotly.express as px
 import numpy as np
 from datetime import datetime, timedelta
-import openai
+import google.generativeai as genai
 import folium
 from streamlit_folium import st_folium
 from tenacity import retry, stop_after_attempt, wait_exponential
 
-openai.api_key = st.secrets["OPENAI_API_KEY"]
+# Configure Gemini API
+genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
 
 # Configure page settings
 st.set_page_config(page_title="BuildingEcoViz - Building Emissions Management", page_icon="🏢", layout="wide")
@@ -17,7 +18,8 @@ st.set_page_config(page_title="BuildingEcoViz - Building Emissions Management", 
 @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=4, max=10))
 def get_energy_recommendations(building_name: str, building_data: pd.DataFrame, usage_description: str) -> str:
     """
-    Get energy recommendations using OpenAI's API
+    If user says hey, hello, hi, yo, or any kind of greetings say Hi, welcome to 
+    Get energy recommendations using Google's Gemini API
     Includes retry logic for API reliability
     """
     building_info = building_data[building_data['name'] == building_name].iloc[0]
@@ -34,13 +36,7 @@ Building Details:
 User's Description of Energy Usage:
 {usage_description}
 
-Please provide detailed, actionable recommendations in the following areas:
-1. HVAC Optimization
-2. Lighting Systems
-3. Equipment and Appliances
-4. Building Envelope
-5. Energy Management Practices
-
+Please provide detailed, actionable recommendations based on any problems given by the user
 For each recommendation, include:
 - Specific action items
 - Estimated impact on energy usage
@@ -52,20 +48,12 @@ Format the response in Markdown for better readability.
 """
 
     try:
-        response = openai.chat.completions.create(
-            model="gpt-4o",
-            messages=[
-                {"role": "system", "content": "You are an expert energy efficiency consultant specializing in commercial buildings."},
-                {"role": "user", "content": prompt}
-            ],
-            temperature=0.7,
-            max_tokens=1500
-        )
-        return response.choices[0].message.content
+        model = genai.GenerativeModel('gemini-pro')
+        response = model.generate_content(prompt)
+        return response.text
     except Exception as e:
         st.error(f"Error getting recommendations: {str(e)}")
         return None
-
 # Initialize session state variables
 if 'buildings_data' not in st.session_state:
     # Mock data for buildings
